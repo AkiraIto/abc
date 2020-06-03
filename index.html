@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+    
+        マイク:
+        <select v-model="selectedAudio" @change="onChange">
+          <option disabled value="">Please select one</option>
+          <option v-for="(audio, key, index) in audios" v-bind:key="index" :value="audio.value">
+            {{ audio.text }}
+          </option>
+        </select>
+
+        カメラ: 
+        <select v-model="selectedVideo" @change="onChange">
+          <option disabled value="">Please select one</option>
+          <option v-for="(video, key, index) in videos" v-bind:key="index" :value="video.value">
+            {{ video.text }}
+          </option>
+        </select>
+        
+        <video id="my-video" muted="true" width="500" autoplay playsinline></video>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="app.js"></script>
+</body>
+</html>
