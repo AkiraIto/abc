@@ -1,10 +1,15 @@
+const APIKEY = 'af99b8e9-3445-46f3-aec6-67c520c0592d'; //è¿½è¨˜
+
+
 const app = new Vue({
     el: '#app',
     data: {
         audios: [],
         videos: [],
-        selectedAudio: '', //’Ç‹L
-        selectedVideo: '', //’Ç‹L
+        selectedAudio: '',
+        selectedVideo: '',
+	    peerId: '', //è¿½è¨˜
+
     },
     methods: {
         onChange: function (){
@@ -14,22 +19,32 @@ const app = new Vue({
         },
 
         connectLocalCamera: async function (){
-            alert('ƒfƒoƒCƒX‚ª‘I‘ð‚³‚ê‚Ü‚µ‚½B');
+            const constraints = {
+                audio: this.selectedAudio ? { deviceId: { exact: this.selectedAudio } } : false,
+                video: this.selectedVideo ? { deviceId: { exact: this.selectedVideo } } : false
+            }
+
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            document.getElementById('my-video').srcObject = stream;
         }
     },
     mounted: async function () {
-            //ƒfƒoƒCƒX‚Ö‚ÌƒAƒNƒZƒX
+        this.peer = new Peer({key: APIKEY, debug: 3}); //æ–°è¦ã«Peerã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
+        this.peer.on('open', () => this.peerId = this.peer.id); //PeerIDã‚’åæ˜ 
+
+        //ãƒ‡ãƒã‚¤ã‚¹ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹
         const deviceInfos = await navigator.mediaDevices.enumerateDevices();
 
-        //1. ƒI[ƒfƒBƒIƒfƒoƒCƒX‚Ìî•ñ‚ðŽæ“¾
+        //1. ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ‡ãƒã‚¤ã‚¹ã®æƒ…å ±ã‚’å–å¾—
         deviceInfos
         .filter(deviceInfo => deviceInfo.kind === 'audioinput')
         .map(audio => this.audios.push({text: audio.label || `Microphone ${this.audios.length + 1}`, value: audio.deviceId}));
 
-        //2. ƒJƒƒ‰‚Ìî•ñ‚ðŽæ“¾
+        //2. ã‚«ãƒ¡ãƒ©ã®æƒ…å ±ã‚’å–å¾—
         deviceInfos
         .filter(deviceInfo => deviceInfo.kind === 'videoinput')
         .map(video => this.videos.push({text: video.label || `Camera  ${this.videos.length - 1}`, value: video.deviceId}));
 
-        console.log(this.audios, this.videos);     }
+        console.log(this.audios, this.videos);
+     }
 });
