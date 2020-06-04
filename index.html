@@ -8,7 +8,13 @@
 </head>
 <body>
     <div id="app">
-    
+        <video id="their-video" width="200" autoplay playsinline></video>
+        <video id="my-video" muted="true" width="500" autoplay playsinline></video>
+        <p>Your Peer ID: <span id="my-id">{{peerId}}</span></p>
+        <input v-model="calltoid" placeholder="call id">
+        <button @click="makeCall" class="button--green">Call</button>
+        <br />
+
         マイク:
         <select v-model="selectedAudio" @change="onChange">
           <option disabled value="">Please select one</option>
@@ -24,12 +30,11 @@
             {{ video.text }}
           </option>
         </select>
-        
-        <video id="my-video" muted="true" width="500" autoplay playsinline></video>
-        <p>Your Peer ID: <span id="my-id">{{peerId}}</span></p> <!--  ←追記 -->
+
     </div>
+
     <script src="https://cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://jp.vuejs.org/js/vue.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
