@@ -8,8 +8,8 @@
 </head>
 <body>
     <div id="app">
-        <video id="their-video" width="200" autoplay playsinline></video>
-        <video id="my-video" muted="true" width="500" autoplay playsinline></video>
+        <video id="their-video" width="400" autoplay playsinline></video>
+        <video id="my-video" muted="true" width="200" autoplay playsinline></video>
         <p>Your Peer ID: <span id="my-id">{{peerId}}</span></p>
         <input v-model="calltoid" placeholder="call id">
         <button @click="makeCall" class="button--green">Call</button>
