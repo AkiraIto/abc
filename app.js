@@ -3,12 +3,13 @@ const APIKEY = 'af99b8e9-3445-46f3-aec6-67c520c0592d'; //追記
 const app = new Vue({
     el: '#app',
     data: {
-        audios: [],
-        videos: [],
+        audios: [], //オーディオデバイス
+        videos: [], //ビデオデバイス
         selectedAudio: '',
         selectedVideo: '',
-        peerId: '',
+        peerId: '', //現在のpeerID
         calltoid: '',
+        listIds: [], //
         localStream: {}
    },
 
@@ -24,7 +25,7 @@ const app = new Vue({
                 audio: this.selectedAudio ? { deviceId: { exact: this.selectedAudio } } : false,
                 video: this.selectedVideo ? { deviceId: { exact: this.selectedVideo } } : false
             }
-        
+
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
             document.getElementById('my-video').srcObject = stream;
             this.localStream = stream;
@@ -41,17 +42,26 @@ const app = new Vue({
                 el.srcObject = stream;
                 el.play();
             });
+        },
+        
+        getCurrentPeers : function() {
+            this.peer.listAllPeers(peers => {
+                console.log(peers);
+                this.listIds = peers.filter( id => id != this.peerId );;
+            });
         }
     },
 
     mounted: async function(){
         this.peer = new Peer({key: APIKEY, debug: 3}); //新規にPeerオブジェクトの作成
-        this.peer.on('open', () => this.peerId = this.peer.id); //PeerIDを反映
+        this.peer.on('open', open => {
+            this.peerId = this.peer.id;
+        }); //PeerIDを反映
         this.peer.on('call', call => {
             call.answer(this.localStream);
             this.connect(call);
         });
-      
+
         //デバイスへのアクセス
         const deviceInfos = await navigator.mediaDevices.enumerateDevices();
 

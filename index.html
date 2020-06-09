@@ -11,7 +11,18 @@
         <video id="their-video" width="400" autoplay playsinline></video>
         <video id="my-video" muted="true" width="200" autoplay playsinline></video>
         <p>Your Peer ID: <span id="my-id">{{peerId}}</span></p>
+        
+        <button @click="getCurrentPeers" class="button">一覧</button>
+
+        <select v-model="calltoid">
+          <option disabled value="">一覧ボタンでリストを更新してください</option>
+          <option v-for="id in listIds" v-bind:value="id" :key="id">
+            {{ id }}
+          </option>
+        </select>
+<!--
         <input v-model="calltoid" placeholder="call id">
+-->        
         <button @click="makeCall" class="button--green">Call</button>
         <br />
 
@@ -31,6 +42,7 @@
           </option>
         </select>
 
+    <br />
     </div>
 
     <script src="https://cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script>
